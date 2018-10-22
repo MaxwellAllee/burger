@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            {{#each burger}}
+
+            <div class="card m-2 p-0 " style=" width: auto ;">
+                <div class="card-body m-0 p-0">
+                    <div class="card-text m-0 p-1">
+                        {{id}} . {{burger_name}}
+                    </div>
+                </div>
+                <button burgerid="{{id}}" class="devour">Devour!</button>
+            </div>
+            {{/each}}
+
+
+        </div>
+        <div class="col-md-6">
+
+            {{#each dburgers}}
+            <span class="card m-2 p-0 " style=" width: 20rem ;">
+                <div class="card-body m-0 p-0">
+                    <div class="card-text m-0 p-1">
+                        {{id}} . {{burger_name}}
+                    </div>
+                </div>
+                </span>
+                {{/each}}
+
+
+        </div>
+
+    </div>
+
+    <div class="row text-center">
+        <h2>Make a burger </h2><br>
+        <form id="addABurger" class="button-size">
+            <textarea type="text" name="nBurg"></textarea>
+            <button type="submit" class="addB">Add</button>
+        </form>
+
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    $(".addB").on("click", function () {
+        //[name=plan] will find an element with a "name" attribute equal to the string "plan"
+        console.log("burger")
+        var newBurg = {
+            burger_name: $("#addABurger [name=nBurg]").val().trim(),
+            devoured: false
+
+        };
+        // Send the POST request.
+        $.ajax("/", {
+            type: "POST",
+            data: newBurg
+        }).then(
+            function () {
+                console.log("created new burger");
+                // Reload the page to get the updated list
+                location.reload();
+            }
+        );
+    });
+
+    $(".devour").on("click", function () {
+
+        // Get the ID by finding an element with a "name" attribute equal to the string "id"
+        var id = $(this).attr("burgerid")
+        console.log(id)
+        var devBurger = {
+            devoured: true
+        };
+
+        // Send the PUT request.
+        $.ajax("/" + id, {
+            type: "PUT",
+            data: devBurger
+        }).then(
+            function () {
+                console.log("updated id ", id);
+                // Reload the page to get the updated list
+                location.reload();
+            }
+        );
+    });
+</script>
